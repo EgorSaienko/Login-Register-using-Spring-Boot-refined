@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Equipment Management</title>
+</head>
+<body>
+<!-- Заголовок сторінки -->
+<h2>Welcome to Equipment Management</h2>
+
+<!-- Для анонімних користувачів -->
+<p sec:authorize="hasRole('ROLE_ANONYMOUS')">Text visible to anonymous. Please log in to access the system.</p>
+
+<!-- Для автентифікованих користувачів -->
+<div sec:authorize="isAuthenticated()">
+  <p>Logged in as: <span sec:authentication="name"></span></p>
+  <p>Has role: <span sec:authentication="authorities"></span></p>
+
+  <!-- Панель користувача -->
+  <div sec:authorize="hasRole('USER')">
+    <h3>Your Assigned Equipment</h3>
+    <!-- Список обладнання, що призначено користувачеві -->
+    <ul>
+      <li th:each="equipment : ${userEquipment}">
+        <span th:text="${equipment.name}"></span> -
+        <span th:text="${equipment.status}"></span> -
+        <span th:text="${equipment.dueDate}"></span>
+        <p th:text="${equipment.comments}"></p>
+      </li>
+    </ul>
+    <p>If you have any issues with the equipment, please leave a comment.</p>
+  </div>
+
+  <!-- Панель адміністратора -->
+  <div sec:authorize="hasRole('ADMIN')">
+    <h3>Admin Dashboard</h3>
+    <p>Manage equipment and assign it to users.</p>
+
+    <!-- Форма для додавання нового обладнання -->
+    <form action="#" method="POST" th:action="@{/admin/equipment/add}">
+      <label for="name">Equipment Name:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" required>
+      <label for="status">Status:</label>
+      <input type="text" id="status" name="status" required>
+      <label for="dueDate">Due Date:</label>
+      <input type="date" id="dueDate" name="dueDate" required>
+      <button type="submit">Add Equipment</button>
+    </form>
+
+    <!-- Призначення обладнання користувачам -->
+    <h4>Assign Equipment to User</h4>
+    <form action="#" method="POST" th:action="@{/admin/equipment/assign}">
+      <label for="equipmentId">Equipment ID:</label>
+      <input type="text" id="equipmentId" name="equipmentId" required>
+      <label for="userId">User ID:</label>
+      <input type="text" id="userId" name="userId" required>
+      <button type="submit">Assign Equipment</button>
+    </form>
+
+    <!-- Редагування існуючого обладнання -->
+    <h4>Edit Equipment</h4>
+    <form action="#" method="POST" th:action="@{/admin/equipment/edit}">
+      <label for="equipmentIdToEdit">Equipment ID:</label>
+      <input type="text" id="equipmentIdToEdit" name="equipmentId" required>
+      <label for="newStatus">New Status:</label>
+      <input type="text" id="newStatus" name="status" required>
+      <button type="submit">Update Equipment</button>
+    </form>
+  </div>
+
+  <!-- Логування користувача -->
+  <a th:href="@{/logout}">Log out</a>
+</div>
+</body>
+</html>

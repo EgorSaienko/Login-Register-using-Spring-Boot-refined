@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/admin-dashboard.css">
+</head>
+<body>
+<h2>Welcome to Admin Dashboard</h2>
+<p>Logged in as: <span sec:authentication="name"></span></p>
+<p>Role: <span sec:authentication="authorities"></span></p>
+
+<h3>Add New Equipment</h3>
+<form th:action="@{/admin/equipment/add}" method="post" class="form-section">
+  <div class="form-grid">
+    <!-- поля форми додавання обладнання -->
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name" required>
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <select name="category" id="category">
+        <option>Computers</option>
+        <option>Printers</option>
+        <option>Scanners</option>
+        <option>Projectors</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="serialNumber">Serial Number:</label>
+      <input type="text" name="serialNumber" id="serialNumber" required>
+    </div>
+    <div>
+      <label for="specifications">Specifications:</label>
+      <input type="text" name="specifications" id="specifications" required>
+    </div>
+    <div class="full-width">
+      <label for="description">Description:</label>
+      <textarea name="description" id="description" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="purchaseDate">Purchase Date:</label>
+      <input type="date" name="purchaseDate" id="purchaseDate" required>
+    </div>
+    <div>
+      <label for="status">Status:</label>
+      <select name="status" id="status">
+        <option th:each="status : ${T(com.example.demo.model.EquipmentStatus).values()}"
+                th:value="${status.name()}"
+                th:text="${status.displayValue}">
+        </option>
+      </select>
+    </div>
+    <div>
+      <label for="returnDate">Return Date:</label>
+      <input type="date" name="returnDate" id="returnDate">
+    </div>
+    <div>
+      <label for="dueDate">Due Date:</label>
+      <input type="date" name="dueDate" id="dueDate">
+    </div>
+  </div>
+  <div class="submit-button">
+    <button type="submit">Add Equipment</button>
+  </div>
+</form>
+
+<h3>Assign Equipment to User</h3>
+<form th:action="@{/admin/equipment/assign}" method="post" class="simple-form" onsubmit="return validateForm()">
+  <label>Equipment ID:</label>
+  <input type="number" name="equipmentId" id="equipmentId" min="1" required>
+
+  <label>Email:</label>
+  <input type="text" id="userEmail" placeholder="Type email..." autocomplete="off">
+  <div id="suggestions"></div>
+  <input type="hidden" name="userId" id="userId" required>
+
+  <button type="submit">Assign</button>
+  <p id="form-error" style="color:red;" th:text="${errorMessage}" th:if="${errorMessage}"></p>
+</form>
+
+<h3>Update Equipment Status</h3>
+<form th:action="@{/admin/equipment/edit}" method="post" class="simple-form" onsubmit="return validateUpdateForm()">
+  <label>Equipment ID:</label>
+  <input type="number" name="equipmentId" id="updateEquipmentId" min="1" required>
+
+  <label>New Status:</label>
+  <select name="status" id="statusSelect">
+    <option th:each="status : ${T(com.example.demo.model.EquipmentStatus).values()}"
+            th:value="${status.name()}"
+            th:text="${status.displayValue}">
+    </option>
+  </select>
+
+  <button type="submit">Update</button>
+  <p id="update-error" style="color:red;" th:text="${errorMessage}" th:if="${errorMessage}"></p>
+</form>
+
+
+<h3>All Equipment</h3>
+<div class="table-container">
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Serial Number</th>
+      <th>Specifications</th>
+      <th>Purchase Date</th>
+      <th>Status</th>
+      <th>Return Date</th>
+      <th>Due Date</th>
+      <th>Assigned To</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="equipment : ${equipments}">
+      <td th:text="${equipment.id}"></td>
+      <td th:text="${equipment.name}"></td>
+      <td th:text="${equipment.category}"></td>
+      <td th:text="${equipment.description}"></td>
+      <td th:text="${equipment.serialNumber}"></td>
+      <td th:text="${equipment.specifications}"></td>
+      <td th:text="${equipment.purchaseDate}"></td>
+      <td th:text="${equipment.status}"></td>
+      <td th:text="${equipment.returnDate}"></td>
+      <td th:text="${equipment.dueDate}"></td>
+      <td th:text="${equipment.assignedUser != null ? equipment.assignedUser.firstName + ' ' + equipment.assignedUser.lastName : 'Not Assigned'}"></td>
+      <td>
+        <form action="/admin/equipment/delete" method="post">
+          <input type="hidden" name="equipmentId" th:value="${equipment.id}">
+          <button class="delete" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Equipment History</h3>
+<div class="table-container">
+  <table>
+    <thead>
+    <tr>
+      <th>Equipment ID</th>
+      <th>User ID</th>
+      <th>Action</th>
+      <th>Comment</th>
+      <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="history : ${equipmentHistory}">
+      <td th:text="${history.equipmentId}"></td>
+      <td th:text="${history.userId}"></td>
+      <td th:text="${history.action}"></td>
+      <td th:text="${history.comment}"></td>
+      <td th:text="${history.actionDate}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<p><a th:href="@{/}">Home</a></p>
+<p><a th:href="@{/logout}">Log out</a></p>
+
+<script src="/js/admin-dashboard.js"></script>
+</body>
+</html>
