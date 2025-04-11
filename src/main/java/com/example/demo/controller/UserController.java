@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.model.User;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -42,6 +43,7 @@ public class UserController {
         equipmentService.addComment(equipmentId, comment);
         return "redirect:/user/dashboard";
     }
+
     @Autowired
     private UserService userService;
 

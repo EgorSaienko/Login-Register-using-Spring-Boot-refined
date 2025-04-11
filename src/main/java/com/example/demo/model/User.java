@@ -17,7 +17,7 @@ import java.util.Collections;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails  {
+public class User implements UserDetails {
     @SequenceGenerator(
             name = "users_sequence",
             sequenceName = "users_sequence",
@@ -88,7 +88,7 @@ public class User implements UserDetails  {
         return password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -117,25 +117,43 @@ public class User implements UserDetails  {
         return enabled;
     }
 
-    public Role getRole() { return role; }
+    public Role getRole() {
+        return role;
+    }
 
-    public void setRole(com.example.demo.model.Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getFirstName() { return firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public String getMobile() { return mobile; }
+    public String getMobile() {
+        return mobile;
+    }
 
-    public void setMobile(String mobile) { this.mobile = mobile; }
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-    public String getLastName() { return lastName; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

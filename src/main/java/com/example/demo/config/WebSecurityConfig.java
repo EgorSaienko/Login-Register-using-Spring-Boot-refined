@@ -50,8 +50,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-                http.authorizeRequests()
-                // URL matching for accessibility
+        http.authorizeRequests()// URL matching for accessibility
                 .antMatchers("/", "/login", "/register").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/account/**").hasAnyAuthority("USER")
@@ -73,15 +72,14 @@ public class WebSecurityConfig {
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
 
-                http.authenticationProvider(authenticationProvider());
-                http.headers().frameOptions().sameOrigin();
+        http.authenticationProvider(authenticationProvider());
+        http.headers().frameOptions().sameOrigin();
 
-                return http.build();
+        return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
     }
-
 }

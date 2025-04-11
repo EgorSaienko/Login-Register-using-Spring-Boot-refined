@@ -86,6 +86,7 @@ public class EquipmentService {
             throw new RuntimeException("Обладнання не знайдено");
         }
     }
+
     public void save(Equipment equipment) {
         // Перевіряємо, чи є purchase_date
         if (equipment.getPurchaseDate() == null) {
@@ -93,6 +94,7 @@ public class EquipmentService {
         }
         equipmentRepository.save(equipment);
     }
+
     public void deleteEquipment(Long equipmentId) {
         if (equipmentRepository.existsById(equipmentId)) {
             equipmentRepository.deleteById(equipmentId);
