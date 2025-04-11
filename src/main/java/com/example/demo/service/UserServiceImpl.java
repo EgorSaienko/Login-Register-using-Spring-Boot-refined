@@ -13,6 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реалізація UserService та UserDetailsService.
+ * Відповідає за реєстрацію, перевірку існування користувачів та авторизацію.
+ */
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -22,6 +26,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * Зберігає користувача з хешуванням паролю.
+     */
     @Override
     public void saveUser(User user) {
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -30,6 +37,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
     }
 
+    /**
+     * Перевіряє, чи вже існує користувач з вказаним email або мобільним.
+     */
     @Override
     public List<Object> isUserPresent(User user) {
         boolean userExists = false;
@@ -52,6 +62,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return Arrays.asList(userExists, message);
     }
 
+    /**
+     * Завантажує користувача за email для Spring Security.
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(
@@ -60,7 +73,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 ));
     }
 
-    // ✅ Новий метод для автопідказки
+    /**
+     * Пошук користувачів за префіксом email (для автозаповнення).
+     */
     @Override
     public List<User> findUsersByEmailPrefix(String emailPrefix) {
         return userRepository.findByEmailStartingWith(emailPrefix);

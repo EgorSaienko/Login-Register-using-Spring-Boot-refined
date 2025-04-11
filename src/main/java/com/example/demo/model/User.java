@@ -14,7 +14,10 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-
+/**
+ * Сутність користувача системи.
+ * Реалізує інтерфейс UserDetails для інтеграції зі Spring Security.
+ */
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -30,14 +33,23 @@ public class User implements UserDetails {
     )
     private Long id;
 
+    /**
+     * Ім'я користувача.
+     */
     @NotNull(message = "First Name cannot be empty")
     @Column(name = "first_name")
     private String firstName;
 
+    /**
+     * Прізвище користувача.
+     */
     @NotNull(message = "Last Name cannot be empty")
     @Column(name = "last_name")
     private String lastName;
 
+    /**
+     * Email користувача, унікальний.
+     */
     @NotNull(message = "Email cannot be empty")
     @Email(message = "Please enter a valid email address")
     @Column(name = "email", unique = true)
@@ -51,29 +63,50 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    /**
+     * Пароль користувача.
+     */
     @NotNull(message = "Password cannot be empty")
     @Length(min = 7, message = "Password should be atleast 7 characters long")
     @Column(name = "password")
     private String password;
 
+    /**
+     * Мобільний номер користувача.
+     */
     @Column(name = "mobile", unique = true)
     @Length(min = 10, message = "Password should be atleast 10 number long")
     private String mobile;
 
+    /**
+     * Дата створення облікового запису.
+     */
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * Дата останнього оновлення облікового запису.
+     */
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    /**
+     * Роль користувача в системі (USER або ADMIN).
+     */
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    /**
+     * Прапорець блокування облікового запису.
+     */
     @Column(name = "locked")
     private Boolean locked = false;
 
+    /**
+     * Прапорець активності облікового запису.
+     */
     @Column(name = "enabled")
     private Boolean enabled = true;
 

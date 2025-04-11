@@ -18,6 +18,10 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контролер для взаємодії з користувачем.
+ * Дозволяє бачити призначене обладнання, залишати коментарі та шукати користувачів за email.
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -28,7 +32,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // Панель користувача
+    /**
+     * Відображає панель користувача з його обладнанням.
+     */
     @GetMapping("/dashboard")
     public String userDashboard(Model model, Authentication authentication) {
         String username = authentication.getName();
@@ -37,7 +43,9 @@ public class UserController {
         return "user_dashboard";
     }
 
-    // Додавання коментаря
+    /**
+     * Додає коментар до обладнання.
+     */
     @PostMapping("/comment")
     public String leaveComment(@RequestParam Long equipmentId, @RequestParam String comment) {
         equipmentService.addComment(equipmentId, comment);
@@ -47,12 +55,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Пошук користувачів за email (використовується для автопідказки).
+     */
     @GetMapping("/search")
     @ResponseBody
     public List<Map<String, Object>> searchUsersByEmail(@RequestParam("query") String query) {
         List<User> users = query.length() < 4 ? new ArrayList<>() : userService.findUsersByEmailPrefix(query);
 
-        // ⬇️ Створюємо легку відповідь у форматі {id, email}
         List<Map<String, Object>> result = new ArrayList<>();
         for (User user : users) {
             Map<String, Object> map = new HashMap<>();
@@ -62,6 +72,4 @@ public class UserController {
         }
         return result;
     }
-
 }
-

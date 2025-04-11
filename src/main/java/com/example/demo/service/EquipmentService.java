@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервіс для управління обладнанням.
+ */
 @Service
 public class EquipmentService {
 
@@ -26,17 +29,23 @@ public class EquipmentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    // Отримання всього обладнання
+    /**
+     * Повертає список всього обладнання.
+     */
     public List<Equipment> getAllEquipments() {
         return equipmentRepository.findAll();
     }
 
-    // Додавання нового обладнання
+    /**
+     * Додає нове обладнання.
+     */
     public void addEquipment(Equipment equipment) {
         equipmentRepository.save(equipment);
     }
 
-    // Призначення обладнання користувачу
+    /**
+     * Призначає обладнання користувачу.
+     */
     public void assignEquipmentToUser(Long equipmentId, Long userId) {
         Optional<Equipment> equipmentOpt = equipmentRepository.findById(equipmentId);
         Optional<User> userOpt = userRepository.findById(userId);
@@ -54,7 +63,9 @@ public class EquipmentService {
         equipmentRepository.save(equipment);
     }
 
-    // Оновлення статусу обладнання
+    /**
+     * Оновлює статус обладнання.
+     */
     public void updateEquipmentStatus(Long equipmentId, String status) {
         Optional<Equipment> equipmentOpt = equipmentRepository.findById(equipmentId);
         if (equipmentOpt.isPresent()) {
@@ -71,12 +82,16 @@ public class EquipmentService {
         }
     }
 
-    // Отримання обладнання, призначеного конкретному користувачу
+    /**
+     * Повертає обладнання, призначене користувачу за email.
+     */
     public List<Equipment> getUserEquipments(String email) {
         return equipmentRepository.findByAssignedUser_Email(email);
     }
 
-    // Додавання коментаря до обладнання
+    /**
+     * Додає коментар до обладнання.
+     */
     public void addComment(Long equipmentId, String commentText) {
         Optional<Equipment> equipmentOpt = equipmentRepository.findById(equipmentId);
         if (equipmentOpt.isPresent()) {
@@ -87,6 +102,9 @@ public class EquipmentService {
         }
     }
 
+    /**
+     * Зберігає обладнання, встановлюючи дату купівлі, якщо її не вказано.
+     */
     public void save(Equipment equipment) {
         // Перевіряємо, чи є purchase_date
         if (equipment.getPurchaseDate() == null) {
@@ -95,6 +113,9 @@ public class EquipmentService {
         equipmentRepository.save(equipment);
     }
 
+    /**
+     * Видаляє обладнання за його ID.
+     */
     public void deleteEquipment(Long equipmentId) {
         if (equipmentRepository.existsById(equipmentId)) {
             equipmentRepository.deleteById(equipmentId);

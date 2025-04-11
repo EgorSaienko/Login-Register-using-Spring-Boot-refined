@@ -14,9 +14,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Обробник успішної аутентифікації.
+ * Переадресовує користувача на відповідну сторінку залежно від його ролі.
+ */
 @Configuration
 public class CustomLoginSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    /**
+     * Обробляє редірект після успішного входу в систему.
+     *
+     * @param request         HTTP-запит
+     * @param response        HTTP-відповідь
+     * @param authentication  Об'єкт аутентифікації з інформацією про користувача
+     * @throws IOException    У випадку помилки вводу/виводу
+     */
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
@@ -26,6 +38,12 @@ public class CustomLoginSucessHandler extends SimpleUrlAuthenticationSuccessHand
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
+    /**
+     * Визначає URL для перенаправлення після входу на основі ролей користувача.
+     *
+     * @param authentication Об'єкт аутентифікації
+     * @return URL для редіректу
+     */
     protected String determineTargetUrl(Authentication authentication) {
         String url = "/login?error=true";
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

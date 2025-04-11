@@ -49,6 +49,36 @@ This project is licensed under the [MIT License](LICENSE).
 
 You can modify database or server settings in the `src/main/resources/application.properties` file.
 
+## Code Documentation
+
+This project uses the **Javadoc** standard. All public methods, classes, and interfaces must be documented.
+
+**Guidelines:**
+- Use Javadoc comments `/** ... */` above each public element.
+- Always describe parameters and return values using the `@param` and `@return` tags.
+- If the method may throw exceptions — include the `@throws` tag.
+
+Documentation is automatically generated using the JDK `javadoc` command.
+
+For more details, see [`docs/generate_docs.md`](docs/generate_docs.md).
+
+### Generating documentation using Javadoc in IntelliJ IDEA
+
+To generate the documentation in IntelliJ IDEA:
+
+1. Go to the menu: **Tools > Generate JavaDoc...**
+2. In the popup window:
+    - Select the module or package you want to document.
+    - Set the **Output directory**, e.g., `docs/api`
+    - Make sure the **scope** is set to include public elements.
+3. Click **OK**.
+4. Open the `docs/api/index.html` file in your browser to view the documentation.
+
+To archive the generated documentation:
+```bash
+cd docs/api
+zip -r java_docs.zip .
+
 ```properties
 #-------------------- Server properties ------------------
 server.port=8080
@@ -72,3 +102,4 @@ spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
 spring.jpa.properties.hibernate.format_sql=true
+

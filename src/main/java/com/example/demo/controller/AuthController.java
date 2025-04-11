@@ -12,22 +12,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Контролер для автентифікації та реєстрації користувачів.
+ */
 @Controller
 public class AuthController {
+
     @Autowired
     UserService userService;
 
+    /**
+     * Відображає сторінку входу.
+     */
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String login() {
         return "auth/login";
     }
 
+    /**
+     * Відображає сторінку реєстрації.
+     */
     @RequestMapping(value = {"/register"}, method = RequestMethod.GET)
     public String register(Model model) {
         model.addAttribute("user", new User());
         return "auth/register";
     }
 
+    /**
+     * Обробляє POST-запит на реєстрацію нового користувача.
+     */
     @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
     public String registerUser(Model model, @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -35,6 +48,7 @@ public class AuthController {
             model.addAttribute("bindingResult", bindingResult);
             return "auth/register";
         }
+
         List<Object> userPresentObj = userService.isUserPresent(user);
         if ((Boolean) userPresentObj.get(0)) {
             model.addAttribute("successMessage", userPresentObj.get(1));
@@ -47,3 +61,4 @@ public class AuthController {
         return "auth/login";
     }
 }
+

@@ -1,31 +1,56 @@
 package com.example.demo.model;
 
+/**
+ * Перелік можливих статусів обладнання.
+ */
 public enum EquipmentStatus {
+    /** Нове обладнання. */
     NEW("New"),
+
+    /** У хорошому стані. */
     GOOD_CONDITION("Good Condition"),
+
+    /** Зношене обладнання. */
     WORN("Worn"),
+
+    /** Потребує ремонту. */
     NEEDS_REPAIR("Needs Repair"),
+
+    /** Пошкоджене. */
     DAMAGED("Damaged");
 
     private final String displayValue;
 
-    // Конструктор для зберігання відображуваного значення
+    /**
+     * Конструктор для зберігання відображуваного значення.
+     * @param displayValue текст для відображення
+     */
     EquipmentStatus(String displayValue) {
         this.displayValue = displayValue;
     }
 
-    // Метод для отримання значення для відображення
+    /**
+     * Повертає значення для відображення (UI).
+     * @return відображуване значення
+     */
     public String getDisplayValue() {
         return displayValue;
     }
 
-    // Метод для отримання значення для бази даних
+    /**
+     * Повертає значення, яке зберігається в базі даних.
+     * @return значення enum у форматі бази даних
+     */
     public String getDatabaseValue() {
-        return name(); // Повертає значення в форматі, який зберігається в базі даних (наприклад, GOOD_CONDITION)
+        return name();
     }
 
-    // Метод для отримання enum за значенням, що зберігається в базі даних
+    /**
+     * Перетворює рядок з бази даних у відповідний enum.
+     * @param dbValue значення з бази даних
+     * @return відповідний елемент enum
+     */
     public static EquipmentStatus fromDatabaseValue(String dbValue) {
-        return EquipmentStatus.valueOf(dbValue); // Перетворення з рядка в enum
+        return EquipmentStatus.valueOf(dbValue);
     }
 }

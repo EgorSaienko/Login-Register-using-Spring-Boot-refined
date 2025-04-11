@@ -6,10 +6,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Репозиторій для роботи з сутністю Equipment.
+ */
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
+    /**
+     * Повертає список обладнання, призначеного користувачу за його email.
+     *
+     * @param email Email користувача
+     * @return список обладнання
+     */
     List<Equipment> findByAssignedUserEmail(String email);
-
 }
+
 

@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сутність коментаря до обладнання.
+ */
 @Entity
 public class Comment {
 
