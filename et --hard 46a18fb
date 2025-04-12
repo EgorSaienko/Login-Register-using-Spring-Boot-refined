@@ -1,0 +1,7 @@
+[33m19598b6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m404b32e[m HEAD@{1}: reset: moving to HEAD~1
+[33m46a18fb[m HEAD@{2}: commit: 🛡️ додав повну стратегію резервного копіювання та сценарії розгортання (за винятком конфіденційної інформації)
+[33m404b32e[m HEAD@{3}: commit: Додано документацію та коментарі в проєкт, оновлено файл README.md
+[33m19598b6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{4}: commit: feat(lint): налаштовано PMD, Checkstyle, SpotBugs + linting.md + правки коду згідно лінтерів
+[33m8957abc[m HEAD@{5}: commit: Add README with project description and MIT license
+[33meefdda5[m HEAD@{6}: commit (initial): initial commit
