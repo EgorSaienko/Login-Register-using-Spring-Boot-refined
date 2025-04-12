@@ -36,3 +36,6 @@ target/
 .idea/
 *.iml
 
+# sensitive config
+config/backup.conf
+

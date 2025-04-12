@@ -86,7 +86,7 @@ public class EquipmentService {
      * Повертає обладнання, призначене користувачу за email.
      */
     public List<Equipment> getUserEquipments(String email) {
-        return equipmentRepository.findByAssignedUser_Email(email);
+        return equipmentRepository.findByAssignedUserEmail(email);
     }
 
     /**
