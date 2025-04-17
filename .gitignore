@@ -37,6 +37,6 @@ target/
 *.iml
 
 # sensitive config
-config/backup.env
+project-root/config/backup.env
 
 

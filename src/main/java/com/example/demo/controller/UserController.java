@@ -3,20 +3,21 @@ package com.example.demo.controller;
 import com.example.demo.model.Equipment;
 import com.example.demo.service.EquipmentService;
 import com.example.demo.service.UserService;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.model.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Контролер для взаємодії з користувачем.
@@ -26,11 +27,16 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private EquipmentService equipmentService;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Відображає панель користувача з його обладнанням.
@@ -38,6 +44,7 @@ public class UserController {
     @GetMapping("/dashboard")
     public String userDashboard(Model model, Authentication authentication) {
         String username = authentication.getName();
+        logger.debug("Loading user dashboard for user: {}", username);
         List<Equipment> userEquipments = equipmentService.getUserEquipments(username);
         model.addAttribute("userEquipments", userEquipments);
         return "user_dashboard";
@@ -48,12 +55,15 @@ public class UserController {
      */
     @PostMapping("/comment")
     public String leaveComment(@RequestParam Long equipmentId, @RequestParam String comment) {
-        equipmentService.addComment(equipmentId, comment);
+        logger.debug("Adding comment to equipment ID={}", equipmentId);
+        try {
+            equipmentService.addComment(equipmentId, comment);
+            logger.info("Successfully added comment to equipment ID={}", equipmentId);
+        } catch (Exception e) {
+            logger.error("Error while adding comment to equipment ID={}: {}", equipmentId, e.getMessage(), e);
+        }
         return "redirect:/user/dashboard";
     }
-
-    @Autowired
-    private UserService userService;
 
     /**
      * Пошук користувачів за email (використовується для автопідказки).
@@ -61,14 +71,19 @@ public class UserController {
     @GetMapping("/search")
     @ResponseBody
     public List<Map<String, Object>> searchUsersByEmail(@RequestParam("query") String query) {
-        List<User> users = query.length() < 4 ? new ArrayList<>() : userService.findUsersByEmailPrefix(query);
-
         List<Map<String, Object>> result = new ArrayList<>();
-        for (User user : users) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", user.getId());
-            map.put("email", user.getEmail());
-            result.add(map);
+        if (query.length() >= 4) {
+            List<User> users = userService.findUsersByEmailPrefix(query);
+            for (User user : users) {
+                logger.debug("Found user with email: {}", user.getEmail());
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", user.getId());
+                map.put("email", user.getEmail());
+                result.add(map);
+            }
+            logger.info("Found {} users with email prefix '{}'", result.size(), query);
+        } else {
+            logger.warn("Search query too short: {}", query);
         }
         return result;
     }
